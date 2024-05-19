@@ -1,0 +1,88 @@
+---
+title: "Simulation based sample size"
+subtitle: "with Type I and Type II error control"
+author: "Elise Dupuis Lozeron"
+date: "May 23, 2024"
+format:
+  revealjs: 
+    slide-number: true
+    theme: [moon, custom.scss]
+    title-slide-attributes:
+      data-background-color: "#e9a4a2"
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+
+## Why do we need to estimate a study sample size?
+
+- The correct sample size is a balance between a study that is too small or too large
+
+- If the sample size is too small we will not be able to show an existing difference between the two arms (false negative result) because of a lack of precision
+
+- If the sample size is too large:
+    - the costs of the study will be excessive
+    - it is unethical to expose too much patients
+    - we will have difficulties to recruit patients
+
+## Reminder about statistical tests
+
+- The purpose of a statistical test is to test a **null hypothesis** $H_0$ about a parameter of the population
+
+- The **null hypothesis** $H_0$ is the one that we want to reject. It often expresses a lack of effect. For example: the effect of the treatment is the same in the control and in the intervention arm
+
+- The **alternative hypothesis** $H_a$ is the one that we want to accept. For example: the effect of the treatment is different in both arms
+
+## Reminder about statistical tests
+
+- There is two errors that can be made with a statistical test
+
+- Type I error: rejecting $H_0$ when it is true. False-positive result. It has a probability of $\alpha$
+
+- Type II error: not rejecting $H_0$ when it is false, i.e. when $H_a$ is true. False-negative result. It has a probability of $\beta$
+
+## Reminder about statistical tests
+
+| Decision             | $H_0$ true              | $H_a$ true              |
+| ---------------------|-------------------------| ------------------------|
+| Reject  $H_0$        | type I error ($\alpha$) | 1- $\beta$              |
+| Do not reject  $H_0$ | 1-$\alpha$              | type II error ($\beta$) |
+
+
+- The **power** of a statistical test is 1- $\beta$. It is the probability of detecting a statistically significant difference when a difference of given magnitude really exists
+
+## Example 
+
+- Randomized double-blind controlled trial carried out to compare inhaled corticosteroids with placebo in school-age children. 
+
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+
+# Thank you for you attention
+
+<!-- <img src="Reg_comics.png" width="500px"/> -->
+
+
+<br/>
+<br/>
+<br/>
+
+{{< fa envelope>}} [elise.lozeron@gmail.com](elise.lozeron@gmail.com)
+<br/>
+{{< fa brands github >}} [elisedupuis](https://github.com/elisedupuis)
+<br/>
+{{< fa brands gitlab >}} [elisedupuis](https://gitlab.com/elisedupuis)
+<br/>
+{{< fa brands linkedin>}} [elise-dupuis-lozeron](https://www.linkedin.com/in/elise-dupuis-lozeron/)
+<br/>

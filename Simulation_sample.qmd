@@ -9,80 +9,383 @@ format:
     theme: [moon, custom.scss]
     title-slide-attributes:
       data-background-color: "#e9a4a2"
-editor: visual
 ---
 
 ```{r}
+#| warning: false
+
 library(tidyverse)
+library(lme4)
+library(emmeans)
+library(gt)
+
 ```
 
+## Statistical tests
 
+-   The purpose of a statistical test is to test a **null hypothesis** $H_0$ about a parameter of the population
 
-## Why do we need to estimate a study sample size?
+-   The **null hypothesis** $H_0$ is the one that [we want to reject]{.hi-pink}. It often expresses a lack of effect. For example: the effect of the treatment is the same in the control and in the intervention arm
 
-- The correct sample size is a balance between a study that is too small or too large
+-   The **alternative hypothesis** $H_a$ is the one that [we want to accept]{.hi-pink}. For example: the effect of the treatment is different in both arms
 
-- If the sample size is too small we will not be able to show an existing difference between the two arms (false negative result) because of a lack of precision
+## Type I and Type II errors
 
-- If the sample size is too large:
-    - the costs of the study will be excessive
-    - it is unethical to expose too much patients
-    - we will have difficulties to recruit patients
+There are two type of errors that can be made with a statistical test:
 
-## Reminder about statistical tests
+-   **Type I error**: [rejecting $H_0$ when it is true]{.hi-pink}. False-positive result. It has a probability of $\alpha$ which is the statistical significance level.
 
-- The purpose of a statistical test is to test a **null hypothesis** $H_0$ about a parameter of the population
+-   **Type II error**: [not rejecting $H_0$ when it is false]{.hi-pink}, i.e. when $H_a$ is true. False-negative result. It has a probability of $\beta$.
 
-- The **null hypothesis** $H_0$ is the one that we want to reject. It often expresses a lack of effect. For example: the effect of the treatment is the same in the control and in the intervention arm
+::: fragment
+| Decision            | $H_0$ true              | $H_a$ true              |
+|---------------------|-------------------------|-------------------------|
+| Reject $H_0$        | type I error ($\alpha$) | 1- $\beta$              |
+| Do not reject $H_0$ | 1-$\alpha$              | type II error ($\beta$) |
+:::
 
-- The **alternative hypothesis** $H_a$ is the one that we want to accept. For example: the effect of the treatment is different in both arms
+## Type I and Type II errors
 
-## Reminder about statistical tests
+-   The **power** of a statistical test is $1- \beta$. It is the probability of [detecting a statistically significant difference]{.hi-pink} when a difference of a given magnitude really exists.
 
-- There is two errors that can be made with a statistical test
+-   Type II error rate is controlled through the power of the test.
 
-- Type I error: rejecting $H_0$ when it is true. False-positive result. It has a probability of $\alpha$
+-   Type I error rate is controlled through $\alpha$.
 
-- Type II error: not rejecting $H_0$ when it is false, i.e. when $H_a$ is true. False-negative result. It has a probability of $\beta$
+::: fragment
+-   These errors are controlled [in the long run]{.hi-pink}.
+:::
 
-## Reminder about statistical tests
-
-| Decision             | $H_0$ true              | $H_a$ true              |
-| ---------------------|-------------------------| ------------------------|
-| Reject  $H_0$        | type I error ($\alpha$) | 1- $\beta$              |
-| Do not reject  $H_0$ | 1-$\alpha$              | type II error ($\beta$) |
-
-
-- The **power** of a statistical test is 1- $\beta$. It is the probability of detecting a statistically significant difference when a difference of given magnitude really exists
-
-## Example 
-
-- Randomized double-blind controlled trial carried out to compare inhaled corticosteroids with placebo in school-age children. 
-
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Power and sample size
 
 ```{r}
-1 + 1
+#| label: plot_fun
+#| warning: false
+
+plot_error <- function(quant_norm = 0.95, diff = 1, precision = 1, title_w){
+  ggplot(data.frame(x = c(-4, 6)), aes(x)) +
+  stat_function(
+    fill = "purple",
+    fun = dnorm,
+    geom = "area",
+    alpha = .5,
+    args = list(
+      mean = 0,
+      sd = precision
+    ),
+    xlim = c(-3, qnorm(quant_norm, mean = 0, sd = precision))
+  ) +
+    stat_function(
+    aes(fill = "TypeI"), 
+    fun = dnorm,
+    geom = "area",
+    alpha = .9,
+    args = list(
+      mean = 0, 
+      sd = precision
+    ),
+    xlim = c(qnorm(quant_norm, mean = 0, sd = precision), 4)
+  ) +
+  stat_function(
+    aes(fill = "TypeII"), 
+    fun = dnorm,
+    geom = "area",
+    alpha = .7,
+    args = list(
+      mean = diff,
+      sd = precision
+    ),
+    xlim = c(-2, qnorm(quant_norm, mean = 0, sd = precision))
+  ) +
+  stat_function(
+    fun = dnorm,
+    geom = "area",
+    linetype = 2,
+    fill = "green",
+    alpha = .3,
+    args = list(
+      mean = diff,
+      sd = precision
+    ),
+    xlim = c(qnorm(quant_norm, mean = 0, sd = precision), 4)
+  ) + 
+  geom_vline(xintercept = qnorm(quant_norm, mean = 0, sd = precision),
+             col = "red") +
+  theme_bw() + 
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position="bottom") +
+  scale_fill_manual(name='Error',
+                     values=c(TypeI = 'blue', TypeII ='orange')) + 
+    labs(title = title_w)
+
+    
+}
 ```
 
+::: columns
+::: {.column width="50%"}
+```{r}
+#|label: density1
+plot_error(quant_norm = 0.95, diff = 1, precision = 1, title_w = "Type I error at 5%")
+```
 
-# Thank you for you attention
+::: fragment
+```{r}
+#|label: density_alpha
+#|fig_cap: "Decreasing Type I error rate to 1%"
 
-<!-- <img src="Reg_comics.png" width="500px"/> -->
+plot_error(quant_norm = 0.99, diff = 1, precision = 1, title_w = "Decreasing Type I error rate to 1%")
+```
+:::
+:::
 
+::: {.column width="50%"}
+::: fragment
+```{r}
+#|label: density_diff
+#|fig_cap: "Decreasing Effect Size"
 
-<br/>
-<br/>
-<br/>
+plot_error(quant_norm = 0.95, diff = 0.5, precision = 1, title_w = "Decreasing Effect Size")
+```
+:::
 
-{{< fa envelope>}} [elise.lozeron@gmail.com](elise.lozeron@gmail.com)
-<br/>
-{{< fa brands github >}} [elisedupuis](https://github.com/elisedupuis)
-<br/>
-{{< fa brands gitlab >}} [elisedupuis](https://gitlab.com/elisedupuis)
-<br/>
-{{< fa brands linkedin>}} [elise-dupuis-lozeron](https://www.linkedin.com/in/elise-dupuis-lozeron/)
-<br/>
+::: fragment
+```{r}
+#|label: density_sd
+#|fig_cap: "Decreasing Variability"
+
+plot_error(quant_norm = 0.95, diff = 1, precision = 0.5, title_w = "Increasing Variability")
+```
+:::
+:::
+:::
+
+## Power and sample size
+
+-   The statistical power of a test allows to control Type II error rate.
+
+-   It depends on:
+
+    -   the [difference to be detected]{.hi-pink} (effect size),
+    -   the $\alpha$ level,
+    -   the sample size.
+
+-   The correct sample size is a balance between a study that is too small or too large (resource constraints, ethical considerations).
+
+## Sample size computation
+
+-   Compute the sample size using [formula]{.hi-pink} existing for a statistical test with a defined $\alpha$, power and [effect size]{.hi-pink}.
+
+-   This approach is limited to study design and statistical test where formula exist.
+
+-   Using simulations (iterative procedure):
+
+    1.  Fix [$n$]{.hi-pink} and [generate samples]{.hi-pink} under a theoretical model and the parameters value from $H_a$,
+    2.  [Fit]{.hi-pink} the chosen statistical model to each sample,
+    3.  Compute the [proportion of significant tests]{.hi-pink} $\leadsto$ power.
+
+## Example
+
+-   Randomized double-blind controlled trial carried out to compare inhaled corticosteroids with placebo in school-age children.
+
+-   Primary endpoint was the mean forced expiratory volume in 1 second (**FEV1**) evaluated at the end of the **6 months** of follow-up.
+
+-   Hypothetical difference to be detected: 0.10$l$ with a sd = 0.25$l$.
+
+-   $\alpha = 5\%$, $1 - \beta = 80\%$
+
+## Sample size
+
+::: columns
+::: {.column width="50%"}
+Theoretical computation:
+
+```{r}
+#| echo: true
+#| code-fold: true
+power.t.test(power = .80, sig.level = 0.05, delta = 0.1, sd = 0.25) 
+```
+:::
+
+::: {.column width="50%"}
+Simulation-based computation:
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| cache: true
+sim_d <- function(seed, n) {
+  mu_t <- 1.64
+  mu_c <- 1.54
+
+  set.seed(seed)
+
+  tibble(group = rep(c("control", "treatment"), each = n)) |>
+    mutate(
+      treatment = ifelse(group == "control", 0, 1),
+      y = ifelse(group == "control",
+        rnorm(n, mean = mu_c, sd = 0.25),
+        rnorm(n, mean = mu_t, sd = 0.25)
+      )
+    )
+}
+
+n_sim <- 500
+
+s <-
+  tibble(seed = 1:n_sim) |>
+  mutate(d = map(seed, sim_d, n = 100)) |>
+  mutate(fit = map(d, ~ lm(y ~ treatment, data = .x) |>
+    broom::tidy()))
+
+power_obt <- 
+  s |>
+  select(-d) |>
+  unnest_longer(fit) |>
+  filter(fit$term == "treatment") |>
+  mutate(signif = fit$p.value < 0.05) |>
+  summarise("simulated power (%)" = sum(signif / 500 * 100))
+```
+
+```{r}
+gt(tibble("n" = 100, power_obt))
+```
+:::
+:::
+
+## Simulation based sample size
+
+-   Randomized cluster trial: 10 pediatricians are asked to recruit 10 patients in each group.
+
+-   The model used to generate the data is a linear mixed model with a random intercept for the pediatrician's clustering.
+
+-   The theoretical treatment effect is the same.
+
+-   $\sigma_{clust} = 0.08$, $\sigma_{res} = 0.24$
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| cache: true
+
+sim_d_mix <- function(seed, n) {
+  Pediatrician <- as.factor(rep(1:10))
+  set.seed(seed)
+  # Random sd intercept for pediatrician
+  Ped_sd <- 0.08
+  Subject <- as.factor(rep(1:n))
+  Condition <- c("Treatment", "Control")
+  # creates "design matrix" for the data
+  X <- expand.grid(Subject = Subject, Pediatrician = Pediatrician, Condition = Condition)
+
+  X <- as_tibble(X)
+  X <- X |>
+    mutate(
+      Condition_dummy = case_when(
+        Condition == "Control" ~ 0,
+        Condition == "Treatment" ~ 1
+      ),
+      # add simulated random effect for the cluster
+      Pediatrician_re = rep(rep(rnorm(10, mean = 0, sd = Ped_sd), each = n), 2)
+    )
+
+  # fixed intercept and coeff to be defined for simulation
+  b <- c(1.54, 0.1)
+
+  # Residual sd to be defined for simulation
+  sd_res <- sqrt((0.25^2 - 0.08^2))
+  resid <- rep(rnorm(200, 0, sd_res))
+  
+  # create outcome
+  X <- as.data.frame(X)
+  FEV1 <- b[1] + b[2] * X$Condition_dummy + X$Pediatrician_re + resid
+  # Final simulated data set
+  data_sim <- cbind(X, FEV1)
+}
+  
+
+n_sim <- 100
+s_lmer <-
+  tibble(seed = 1:n_sim) |>
+  mutate(data_w = map(seed, sim_d_mix, n = 10)) |>
+  # Apply mixed model
+  mutate(fit = map(data_w, ~ lmer(FEV1 ~ Condition + (1 | Pediatrician), data = .x))) |>
+  # Compute treatment effect pvalue using Kenward Rodger df
+  mutate(emm_fit = map(fit, ~ emmeans(.x, pairwise ~ Condition))) |>
+  # Extract pvalue
+  mutate(p_val_sim = map(emm_fit, ~ as.data.frame(.x$contrasts)[1, 6]))
+  
+power_obt <-
+  s_lmer |>
+  summarise("simulated power (%)" = sum(p_val_sim < 0.05) / 100 * 100)
+```
+
+```{r}
+gt(tibble(
+  "n" = 200,
+  "Design" = "Cluster RCT",
+  power_obt
+))
+```
+
+## Simulation based sample size
+
+-   With the same study design and parameters values, what if 1 patient with the best FEV1 is lost to follow-up in the treatment group only?
+
+```{r}
+#| echo: true
+#| code-fold: true
+#| cache: true
+
+data_lost <- function(data, ltfup, n) {
+  data  <- as_tibble(data) |> 
+    arrange(Condition, Pediatrician, desc(FEV1)) |> 
+    mutate(remdata = rep(c(rep("Yes", times = ltfup), rep("No", times = (n-ltfup))), 20)) |> 
+    filter(!(Condition == "Treatment" & remdata == "Yes"))
+}
+ 
+
+n_sim <- 100
+s_lmer_lost <-
+  tibble(seed = 1:n_sim) |>
+  mutate(data_w = map(seed, sim_d_mix, n = 10)) |>
+  mutate(data_mod = map(data_w, ~ data_lost(.x, ltfup = 1, n = 10))) |>
+  mutate(fit = map(data_mod, ~ lmer(FEV1 ~ Condition + (1 | Pediatrician), data = .x))) |>
+  mutate(emm_fit = map(fit, ~ emmeans(.x, pairwise ~ Condition))) |>
+  mutate(p_val_sim = map(emm_fit, ~ as.data.frame(.x$contrasts)[1, 6]))
+  
+power_obt_lost <-
+  s_lmer_lost |>
+  summarise("simulated power (%)" = sum(p_val_sim < 0.05) / 100 * 100)
+```
+
+```{r}
+gt(tibble(
+  "n" = 200,
+  "Design" = "Cluster RCT with lost to follow-up",
+  power_obt_lost
+))
+```
+
+## Conclusions
+
+-   Sample size computation allows to control Type II error.
+
+-   It is an important part of the [study plannification]{.hi-pink}.
+
+-   Depending on the complexity of the study design and the applied statistical model it can be done using formula or simulations.
+
+-   It remains a theoretical computation based on [several assumptions]{.hi-pink}.
+
+## Thank you for you attention
+
+::: columns
+::: {.column width="50%"}
+[{{< fa envelope>}} [elise.lozeron\@gmail.com](elise.lozeron@gmail.com) <br/> {{< fa brands github >}} [elisedupuis](https://github.com/elisedupuis) <br/> {{< fa brands gitlab >}} [elisedupuis](https://gitlab.com/elisedupuis) <br/> {{< fa brands linkedin>}} [elise-dupuis-lozeron](https://www.linkedin.com/in/elise-dupuis-lozeron/) <br/>]{.absolute bottom="20%"}
+:::
+
+::: {.column width="50%"}
+![](images/quantum.jpg){.absolute bottom="20%"}
+:::
+:::

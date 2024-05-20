@@ -31,7 +31,7 @@ library(gt)
 
 ## Type I and Type II errors
 
-There are two type of errors that can be made with a statistical test:
+There are two types of errors that can be made with a statistical test:
 
 -   **Type I error**: [rejecting $H_0$ when it is true]{.hi-pink}. False-positive result. It has a probability of $\alpha$ which is the statistical significance level.
 
@@ -163,7 +163,7 @@ plot_error(quant_norm = 0.95, diff = 1, precision = 0.5, title_w = "Increasing V
 
 ## Power and sample size
 
--   The statistical power of a test allows to control Type II error rate.
+-   The statistical power of a test allows control of the Type II error rate.
 
 -   It depends on:
 
@@ -175,13 +175,13 @@ plot_error(quant_norm = 0.95, diff = 1, precision = 0.5, title_w = "Increasing V
 
 ## Sample size computation
 
--   Compute the sample size using [formula]{.hi-pink} existing for a statistical test with a defined $\alpha$, power and [effect size]{.hi-pink}.
+-   Compute the sample size using the [formulas]{.hi-pink} which exist for a statistical test with a given $\alpha$, power and [effect size]{.hi-pink}.
 
--   This approach is limited to study design and statistical test where formula exist.
+-   This approach is limited to study designs and statistical tests where formulas exist.
 
 -   Using simulations (iterative procedure):
 
-    1.  Fix [$n$]{.hi-pink} and [generate samples]{.hi-pink} under a theoretical model and the parameters value from $H_a$,
+    1.  Fix [$n$]{.hi-pink} and [generate samples]{.hi-pink} from a theoretical model and parameter's value under $H_a$,
     2.  [Fit]{.hi-pink} the chosen statistical model to each sample,
     3.  Compute the [proportion of significant tests]{.hi-pink} $\leadsto$ power.
 
@@ -331,7 +331,7 @@ gt(tibble(
 
 ## Simulation based sample size
 
--   With the same study design and parameters values, what if 1 patient with the best FEV1 is lost to follow-up in the treatment group only?
+-   With the same study design and parameters' values, what will be the power if 1 patient with the best FEV1 is lost to follow-up, in the treatment group only?
 
 ```{r}
 #| echo: true
@@ -370,11 +370,11 @@ gt(tibble(
 
 ## Conclusions
 
--   Sample size computation allows to control Type II error.
+-   Sample size computation allows for control of Type II error rate.
 
--   It is an important part of the [study plannification]{.hi-pink}.
+-   It is an important part of [study planning]{.hi-pink} and it should be justified.
 
--   Depending on the complexity of the study design and the applied statistical model it can be done using formula or simulations.
+-   Depending on the complexity of the study design and the applied statistical model it can be done using formulas or simulations.
 
 -   It remains a theoretical computation based on [several assumptions]{.hi-pink}.
 

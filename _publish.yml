@@ -1,0 +1,4 @@
+- source: Simulation_sample.qmd
+  quarto-pub:
+    - id: bbe0ead9-98ec-4ae3-b7db-493afb02f5b2
+      url: 'https://edupuis.quarto.pub/simulation-based-sample-size'

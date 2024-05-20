@@ -417,7 +417,7 @@ Elise Dupuis Lozeron
 </section>
 <section id="type-i-and-type-ii-errors" class="slide level2">
 <h2>Type I and Type II errors</h2>
-<p>There are two type of errors that can be made with a statistical test:</p>
+<p>There are two types of errors that can be made with a statistical test:</p>
 <ul>
 <li><p><strong>Type I error</strong>: <span class="hi-pink">rejecting <span class="math inline">\(H_0\)</span> when it is true</span>. False-positive result. It has a probability of <span class="math inline">\(\alpha\)</span> which is the statistical significance level.</p></li>
 <li><p><strong>Type II error</strong>: <span class="hi-pink">not rejecting <span class="math inline">\(H_0\)</span> when it is false</span>, i.e.&nbsp;when <span class="math inline">\(H_a\)</span> is true. False-negative result. It has a probability of <span class="math inline">\(\beta\)</span>.</p></li>
@@ -517,7 +517,7 @@ Elise Dupuis Lozeron
 <section id="power-and-sample-size-1" class="slide level2">
 <h2>Power and sample size</h2>
 <ul>
-<li><p>The statistical power of a test allows to control Type II error rate.</p></li>
+<li><p>The statistical power of a test allows control of the Type II error rate.</p></li>
 <li><p>It depends on:</p>
 <ul>
 <li>the <span class="hi-pink">difference to be detected</span> (effect size),</li>
@@ -530,11 +530,11 @@ Elise Dupuis Lozeron
 <section id="sample-size-computation" class="slide level2">
 <h2>Sample size computation</h2>
 <ul>
-<li><p>Compute the sample size using <span class="hi-pink">formula</span> existing for a statistical test with a defined <span class="math inline">\(\alpha\)</span>, power and <span class="hi-pink">effect size</span>.</p></li>
-<li><p>This approach is limited to study design and statistical test where formula exist.</p></li>
+<li><p>Compute the sample size using the <span class="hi-pink">formulas</span> which exist for a statistical test with a given <span class="math inline">\(\alpha\)</span>, power and <span class="hi-pink">effect size</span>.</p></li>
+<li><p>This approach is limited to study designs and statistical tests where formulas exist.</p></li>
 <li><p>Using simulations (iterative procedure):</p>
 <ol type="1">
-<li>Fix <span class="hi-pink"><span class="math inline">\(n\)</span></span> and <span class="hi-pink">generate samples</span> under a theoretical model and the parameters value from <span class="math inline">\(H_a\)</span>,</li>
+<li>Fix <span class="hi-pink"><span class="math inline">\(n\)</span></span> and <span class="hi-pink">generate samples</span> from a theoretical model and parameter’s value under <span class="math inline">\(H_a\)</span>,</li>
 <li><span class="hi-pink">Fit</span> the chosen statistical model to each sample,</li>
 <li>Compute the <span class="hi-pink">proportion of significant tests</span> <span class="math inline">\(\leadsto\)</span> power.</li>
 </ol></li>
@@ -1609,7 +1609,7 @@ NOTE: n is number in *each* group</code></pre>
 <section id="simulation-based-sample-size-1" class="slide level2">
 <h2>Simulation based sample size</h2>
 <ul>
-<li>With the same study design and parameters values, what if 1 patient with the best FEV1 is lost to follow-up in the treatment group only?</li>
+<li>With the same study design and parameters’ values, what will be the power if 1 patient with the best FEV1 is lost to follow-up, in the treatment group only?</li>
 </ul>
 <div class="cell">
 <details class="code-fold">
@@ -2105,9 +2105,9 @@ NOTE: n is number in *each* group</code></pre>
 <section id="conclusions" class="slide level2">
 <h2>Conclusions</h2>
 <ul>
-<li><p>Sample size computation allows to control Type II error.</p></li>
-<li><p>It is an important part of the <span class="hi-pink">study plannification</span>.</p></li>
-<li><p>Depending on the complexity of the study design and the applied statistical model it can be done using formula or simulations.</p></li>
+<li><p>Sample size computation allows for control of Type II error rate.</p></li>
+<li><p>It is an important part of <span class="hi-pink">study planning</span> and it should be justified.</p></li>
+<li><p>Depending on the complexity of the study design and the applied statistical model it can be done using formulas or simulations.</p></li>
 <li><p>It remains a theoretical computation based on <span class="hi-pink">several assumptions</span>.</p></li>
 </ul>
 </section>

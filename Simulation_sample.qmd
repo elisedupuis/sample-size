@@ -183,7 +183,7 @@ plot_error(quant_norm = 0.95, diff = 0.5, precision = 1, title_w = "Decreasing E
 #|label: density_sd
 #|fig_cap: "Decreasing Variability"
 
-plot_error(quant_norm = 0.95, diff = 1, precision = 0.5, title_w = "Increasing Variability")
+plot_error(quant_norm = 0.95, diff = 1, precision = 0.5, title_w = "Decreasing Variability")
 ```
 :::
 :::

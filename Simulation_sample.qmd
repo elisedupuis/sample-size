@@ -277,7 +277,7 @@ power_obt <-
 ```
 
 ```{r}
-gt(tibble("n" = 100, power_obt))
+gt(tibble("n" = 200, power_obt))
 ```
 :::
 :::

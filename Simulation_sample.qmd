@@ -29,20 +29,48 @@ library(gt)
 
 -   The **alternative hypothesis** $H_a$ is the one that [we want to accept]{.hi-pink}. For example: the effect of the treatment is different in both arms
 
-## Type I and Type II errors
+## Type I and Type II errors 
 
 There are two types of errors that can be made with a statistical test:
 
--   **Type I error**: [rejecting $H_0$ when it is true]{.hi-pink}. False-positive result. It has a probability of $\alpha$ which is the statistical significance level.
+
+-   **Type I error**: [rejecting $H_0$ when it is true]{.hi-pink}. False-positive 
+result. It has a probability of $\alpha$ which is the statistical significance level.
+
+
+![](images/TypeI.png){.absolute bottom=0 left=350 width="350"}
+
+## Type I and Type II errors {visibility="uncounted"}
+
+There are two types of errors that can be made with a statistical test:
+
+
+-   **Type I error**: [rejecting $H_0$ when it is true]{.hi-pink}. False-positive 
+result. It has a probability of $\alpha$ which is the statistical significance level.
 
 -   **Type II error**: [not rejecting $H_0$ when it is false]{.hi-pink}, i.e. when $H_a$ is true. False-negative result. It has a probability of $\beta$.
 
-::: fragment
+
+![](images/TypeII.png){.absolute bottom=0 left=350 width="350"}
+
+
+## Type I and Type II errors {visibility="uncounted"}
+
+There are two types of errors that can be made with a statistical test:
+
+
+-   **Type I error**: [rejecting $H_0$ when it is true]{.hi-pink}. False-positive 
+result. It has a probability of $\alpha$ which is the statistical significance level.
+
+-   **Type II error**: [not rejecting $H_0$ when it is false]{.hi-pink}, i.e. when $H_a$ is true. False-negative result. It has a probability of $\beta$.
+
+
+
 | Decision            | $H_0$ true              | $H_a$ true              |
 |---------------------|-------------------------|-------------------------|
 | Reject $H_0$        | type I error ($\alpha$) | 1- $\beta$              |
 | Do not reject $H_0$ | 1-$\alpha$              | type II error ($\beta$) |
-:::
+
 
 ## Type I and Type II errors
 
